@@ -2,27 +2,23 @@ package com.josyf.macrobuttons;
 
 
 
-import io.github.cottonmc.cotton.gui.GuiDescription;
-import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
-import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
-import io.github.cottonmc.cotton.gui.widget.WButton;
-import io.github.cottonmc.cotton.gui.widget.WGridPanel;
-import io.github.cottonmc.cotton.gui.widget.WLabel;
-import io.github.cottonmc.cotton.gui.widget.WSprite;
+import com.josyf.macrobuttons.gui.ButtonGUI;
+import com.josyf.macrobuttons.gui.ButtonGUIScreen;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class MacroButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
+
+    int xValue;
+    int yValue;
+
 
 
     @Override
@@ -44,44 +40,25 @@ public class MacroButtons implements ModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyBinding.wasPressed()) {
                 // client.player.sendMessage(new LiteralText("Key 1 was pressed!"), false);
-                MinecraftClient.getInstance().openScreen(new ExampleScreen(new ExampleGui()));
+                MinecraftClient.getInstance().openScreen(new ButtonGUIScreen(new ButtonGUI()));
                 //printMessage();
             }
         });
     }
 
-    public class ExampleScreen extends CottonClientScreen {
-        public ExampleScreen(GuiDescription description) {
-            super(description);
-        }
-    }
-
-    public class ExampleGui extends LightweightGuiDescription {
-        public ExampleGui() {
-            WGridPanel root = new WGridPanel();
-            setRootPanel(root);
-            root.setSize(256, 240);
-
-            // WSprite icon = new WSprite(new Identifier("minecraft:textures/item/redstone.png"));
-            // root.add(icon, 0, 2, 1, 1);
-
-            // example button to play with
-            WButton button = new WButton(new TranslatableText("gui.examplemod.examplebutton"));
-            button.setOnClick(() -> {
-               printMessage();
-            });
-            root.add(button, 0, 3, 4, 1);
-
-            WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
-            root.add(label, 0, 4, 2, 1);
-
-            root.validate(this);
-        }
-    }
 
     // player can run a command here
-    private void printMessage() {
+    public static void printMessage() {
         MinecraftClient.getInstance().player.sendChatMessage("/seed");
+    }
+
+    // player adds command button to GUI
+    public static void addGUIButton() {
+        MinecraftClient.getInstance().player.sendChatMessage("Adding button!");
+    }
+
+    public int incrementNumber(int a, int b) {
+        return a+b;
     }
 
 }
