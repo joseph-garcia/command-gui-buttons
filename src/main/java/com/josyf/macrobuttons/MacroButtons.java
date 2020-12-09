@@ -16,8 +16,6 @@ public class MacroButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
 
-    int xValue;
-    int yValue;
 
 
 
@@ -52,14 +50,7 @@ public class MacroButtons implements ModInitializer {
         MinecraftClient.getInstance().player.sendChatMessage("/seed");
     }
 
-    // player adds command button to GUI
-    public static void addGUIButton() {
-        MinecraftClient.getInstance().player.sendChatMessage("Adding button!");
-    }
 
-    public int incrementNumber(int a, int b) {
-        return a+b;
-    }
 
 }
 

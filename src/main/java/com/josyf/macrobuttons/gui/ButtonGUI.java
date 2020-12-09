@@ -7,14 +7,21 @@ import io.github.cottonmc.cotton.gui.widget.WButton;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WLabel;
 import io.github.cottonmc.cotton.gui.widget.WTextField;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
 public class ButtonGUI extends LightweightGuiDescription {
+
+    int xValue = 0;
+    int yValue = 1;
+
+    
+
     public ButtonGUI() {
         WGridPanel root = new WGridPanel();
         setRootPanel(root);
-        root.setSize(256, 240);
+        root.setSize(300, 240);
 
         // WSprite icon = new WSprite(new Identifier("minecraft:textures/item/redstone.png"));
         // root.add(icon, 0, 2, 1, 1);
@@ -24,7 +31,7 @@ public class ButtonGUI extends LightweightGuiDescription {
         button.setOnClick(() -> {
             MacroButtons.printMessage();
         });
-        root.add(button, 0, 3, 4, 1);
+        root.add(button, xValue, yValue, 4, 1);
 
         WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
         root.add(label, 0, 4, 2, 1);
@@ -42,9 +49,37 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Add button for command entry
         WButton addCmdBtn = new WButton(new TranslatableText("+"));
         addCmdBtn.setOnClick(() -> {
-            MacroButtons.addGUIButton();
+            addGUIButton(root, xValue);
         });
         root.add(addCmdBtn, 13, 12, 1, 1);
+    }
+
+    private void addGUIButton(WGridPanel root, int x) {
+        WButton button = new WButton(new TranslatableText("Button"));
+        button.setOnClick(() -> {
+            // MacroButtons.printMessage();
+        });
+        // int newX = incrementNumber(x, 4);
+        System.out.println("x val: " + xValue);
+        System.out.println("y val: " + yValue);
+
+        root.add(button, xValue, yValue, 4, 1);
+
+        adjustBounds();
+
+    }
+
+    private void adjustBounds() {
+        if (xValue % 12 == 0 && xValue != 0) {
+            yValue += 2;
+            xValue = 0;
+        } else {
+            xValue += 4;
+        }
+    }
+
+    private int incrementNumber(int a, int b) {
+        return a+b;
     }
 
     // Change background panel color to transparent black
@@ -53,4 +88,6 @@ public class ButtonGUI extends LightweightGuiDescription {
         super.addPainters();
         this.rootPanel.setBackgroundPainter(BackgroundPainter.createColorful(0x4D000000));
     }
+
+
 }
