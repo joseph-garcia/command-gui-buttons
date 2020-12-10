@@ -14,7 +14,7 @@ public class ButtonGUI extends LightweightGuiDescription {
     int xValue = 0;
     int yValue = 1;
 
-    private static String ConfigSettings;
+    private static String ConfigSettings = ConfigFile.readFile();
 
     public ButtonGUI() {
 
@@ -38,6 +38,13 @@ public class ButtonGUI extends LightweightGuiDescription {
             ConfigFile.loadSerialization();
         });
         root.add(button2, xValue + 2, yValue, 4, 1);
+
+        // read json file button
+        WButton button3 = new WButton(new TranslatableText("Read command json"));
+        button3.setOnClick(() -> {
+            ConfigFile.readFile();
+        });
+        root.add(button3, xValue + 6, yValue + 2, 4, 1);
 
         // Text GUI, not needed yet
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
