@@ -7,8 +7,6 @@ import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 public class ButtonGUIScreen extends CottonClientScreen {
     public ButtonGUIScreen(GuiDescription description) {
         super(description);
-
-
     }
 
 

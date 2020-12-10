@@ -16,9 +16,6 @@ public class MacroButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
 
-
-
-
     @Override
     public void onInitialize() {
         assignGuiToKey();
@@ -28,6 +25,7 @@ public class MacroButtons implements ModInitializer {
 
         System.out.println("I'm getting here");
 
+        // Currently assigns to the G key
         KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.macrobuttons.opengui", // The translation key of the keybinding's name
                 InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
@@ -39,7 +37,7 @@ public class MacroButtons implements ModInitializer {
             while (keyBinding.wasPressed()) {
                 // client.player.sendMessage(new LiteralText("Key 1 was pressed!"), false);
                 MinecraftClient.getInstance().openScreen(new ButtonGUIScreen(new ButtonGUI()));
-                //printMessage();
+                // printMessage();
             }
         });
     }

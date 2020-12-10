@@ -1,6 +1,6 @@
 package com.josyf.macrobuttons;
 
-public class Message {
+public class CommandObject {
 
     public String message;
 }

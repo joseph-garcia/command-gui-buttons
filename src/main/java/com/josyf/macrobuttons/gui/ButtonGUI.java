@@ -1,46 +1,33 @@
 package com.josyf.macrobuttons.gui;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.josyf.macrobuttons.ConfigFile;
 import com.josyf.macrobuttons.MacroButtons;
-import com.josyf.macrobuttons.Message;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.WButton;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
-import io.github.cottonmc.cotton.gui.widget.WLabel;
 import io.github.cottonmc.cotton.gui.widget.WTextField;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class ButtonGUI extends LightweightGuiDescription {
 
     int xValue = 0;
     int yValue = 1;
 
-    private static FileWriter file;
-
-    String JSONMessage = "not yet set";
-
-    
+    private static String ConfigSettings;
 
     public ButtonGUI() {
-        WGridPanel root = new WGridPanel();
-        setRootPanel(root);
-        root.setSize(300, 240);
 
-        // WSprite icon = new WSprite(new Identifier("minecraft:textures/item/redstone.png"));
-        // root.add(icon, 0, 2, 1, 1);
+        // initialize root panel of GUI
+        WGridPanel root = new WGridPanel();
+
+        setupBackground(root);
 
         // example button to play with
         WButton button = new WButton(new TranslatableText("Serialize"));
         button.setOnClick(() -> {
             MacroButtons.printMessage();
-            createMessageForSerialization();
+            ConfigFile.serializeCommand();
         });
         root.add(button, xValue, yValue, 4, 1);
 
@@ -48,57 +35,25 @@ public class ButtonGUI extends LightweightGuiDescription {
         WButton button2 = new WButton(new TranslatableText("Load Serialization"));
         button2.setOnClick(() -> {
             MacroButtons.printMessage();
-            loadSerialization();
+            ConfigFile.loadSerialization();
         });
         root.add(button2, xValue + 2, yValue, 4, 1);
 
-        WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
-        root.add(label, 0, 4, 2, 1);
+        // Text GUI, not needed yet
+        // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
+        // root.add(label, 0, 4, 2, 1);
 
         addCommandSection(root);
 
         root.validate(this);
     }
 
-    private void createMessageForSerialization() {
-        Message myMessage = new Message();
-        myMessage.message = "hello";
-        JSONMessage = JSON.toJSONString(myMessage);
-        writeToFile(JSONMessage);
+    public static void setConfig(String configSettings) {
+        ConfigSettings = configSettings;
     }
 
-    private String getJsonMessage() {
-        return JSONMessage;
-    }
-
-    private void loadSerialization() {
-        String JsonMessage = getJsonMessage();
-        if (JsonMessage.equals("not yet set")) {
-            MacroButtons.sayMessage("not yet set!");
-        } else {
-            String deserializedMessage = JSON.parseObject(JsonMessage, String.class);
-            MacroButtons.sayMessage(deserializedMessage);
-        }
-
-    }
-
-    private void writeToFile(String jsonMessage) {
-        try {
-            // these both write to the correct location
-            file = new FileWriter("commands.json");
-            // file = new FileWriter(MinecraftClient.getInstance().runDirectory + "/command.json");
-            file.write(jsonMessage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+    public static String getConfig() {
+        return ConfigSettings;
     }
 
     private void addCommandSection(WGridPanel root) {
@@ -147,6 +102,11 @@ public class ButtonGUI extends LightweightGuiDescription {
     public void addPainters() {
         super.addPainters();
         this.rootPanel.setBackgroundPainter(BackgroundPainter.createColorful(0x4D000000));
+    }
+
+    private void setupBackground(WGridPanel root) {
+        setRootPanel(root);
+        root.setSize(300, 240);
     }
 
 
