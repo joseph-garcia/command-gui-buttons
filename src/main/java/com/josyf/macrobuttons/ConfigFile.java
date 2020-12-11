@@ -2,6 +2,9 @@ package com.josyf.macrobuttons;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.cedarsoftware.util.io.JsonWriter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.josyf.macrobuttons.gui.ButtonGUI;
 import io.netty.channel.group.ChannelGroupFuture;
 import net.minecraft.client.MinecraftClient;
@@ -24,16 +27,12 @@ public class ConfigFile {
     //private static final String configSettings = ButtonGUI.getConfig();
 
     public static void serializeCommand() {
+
+        // CREATE OBJECT
         CommandObject newCommand = new CommandObject();
         newCommand.name = "Say Hello";
         newCommand.command = "Hello";
-        // append new object to JSON file
 
-
-        // ButtonGUI.setConfig(JSON.toJSONString(newCommand));
-
-        // get instance of current config
-        String configInstance = ButtonGUI.getConfig();
         // add new object to config
         appendToFile(newCommand);
 
@@ -54,16 +53,29 @@ public class ConfigFile {
     }
 
     private static void appendToFile(CommandObject commandObject) {
-        JSONArray jsonArray = null;
+        JSONArray jsonArray = new JSONArray();
         try {
-            jsonArray = (JSONArray) parser.parse(new FileReader("commands.json"));
-            //JSONArray jsonArray = new JSONArray();
+            //jsonArray = (JSONArray) parser.parse(new FileReader("commands.json"));
+
+            // if commands.json exists, read it, convert it to an array, and append
+            Object obj = parser.parse(new FileReader("commands.json"));
+            JSONArray array = (JSONArray) parser.parse(obj.toString());
+            array.add(commandObject);
+            writeToFile(array);
+            System.out.println("attempting to append");
+
+
+            //System.out.println(obj.getClass());
+            System.out.println("Array size: " + array.size());
+
+        } catch (IOException e) { // commands.json doesn't exist
+            System.out.println("catch 1");
+            // create json
             jsonArray.add(commandObject);
             writeToFile(jsonArray);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (ParseException e) {
-            e.printStackTrace();
+            System.out.println("catch 2");
+
         }
 
 
@@ -72,8 +84,11 @@ public class ConfigFile {
     private static void writeToFile(JSONArray jsonArray) {
         try {
             fileWriter = new FileWriter("commands.json");
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String jArrayToString = JSON.toJSONString(jsonArray);
-            fileWriter.write(jArrayToString);
+            String formattedJson = JsonWriter.formatJson(jArrayToString);
+            //fileWriter.write(jArrayToString);
+            fileWriter.write(formattedJson);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
