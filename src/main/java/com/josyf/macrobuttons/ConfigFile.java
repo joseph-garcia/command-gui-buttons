@@ -37,8 +37,6 @@ public class ConfigFile {
         appendToFile(newCommand);
 
         // set instance to real config
-
-        //writeToFile(ButtonGUI.getConfig());
     }
 
     public static void loadSerialization() {
