@@ -31,7 +31,7 @@ public class ConfigFile {
         // CREATE OBJECT
         CommandObject newCommand = new CommandObject();
         newCommand.name = "Say Hello";
-        newCommand.command = "Hello";
+        newCommand.command = "Hello 2";
 
         // add new object to config
         appendToFile(newCommand);

@@ -23,13 +23,14 @@ public class ButtonGUI extends LightweightGuiDescription {
 
         setupBackground(root);
 
+        // ######### DEBUG BUTTONS ############
         // example button to create config JSON
         WButton button = new WButton(new TranslatableText("Serialize"));
         button.setOnClick(() -> {
             MacroButtons.printMessage();
             ConfigFile.serializeCommand();
         });
-        root.add(button, xValue, yValue, 4, 1);
+        root.add(button, xValue, yValue + 9, 4, 1);
 
         // example load serialization button
         WButton button2 = new WButton(new TranslatableText("Load Serialization"));
@@ -37,14 +38,15 @@ public class ButtonGUI extends LightweightGuiDescription {
             MacroButtons.printMessage();
             ConfigFile.loadSerialization();
         });
-        root.add(button2, xValue + 4, yValue, 6, 1);
+        root.add(button2, xValue + 4, yValue + 9, 6, 1);
 
         // read json file button
         WButton button3 = new WButton(new TranslatableText("Read command json"));
         button3.setOnClick(() -> {
             ConfigFile.readFile();
         });
-        root.add(button3, xValue + 10, yValue, 6, 1);
+        root.add(button3, xValue + 10, yValue + 9, 6, 1);
+        // ######### DEBUG BUTTONS ############
 
         // Text GUI, not needed yet
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
@@ -60,16 +62,22 @@ public class ButtonGUI extends LightweightGuiDescription {
     }
 
     private void addCommandSection(WGridPanel root) {
-        // Add text field for command entry
+        // Add text field for command NAME entry
+        WTextField nameTextField = new WTextField();
+        nameTextField.setSuggestion("Name");
+        root.add(nameTextField, 5, 12, 6, 1);
+
+        // Add text field for command / entry
         WTextField textField = new WTextField();
-        root.add(textField, 6, 12, 6, 1);
+        textField.setSuggestion("/command");
+        root.add(textField, 11, 12, 6, 1);
 
         // Add button for command entry
         WButton addCmdBtn = new WButton(new TranslatableText("+"));
         addCmdBtn.setOnClick(() -> {
             addGUIButton(root, xValue);
         });
-        root.add(addCmdBtn, 13, 12, 1, 1);
+        root.add(addCmdBtn, 18, 12, 1, 1);
     }
 
     private void addGUIButton(WGridPanel root, int x) {
@@ -105,7 +113,7 @@ public class ButtonGUI extends LightweightGuiDescription {
 
     private void setupBackground(WGridPanel root) {
         setRootPanel(root);
-        root.setSize(300, 240);
+        root.setSize(350, 240);
     }
 
 
