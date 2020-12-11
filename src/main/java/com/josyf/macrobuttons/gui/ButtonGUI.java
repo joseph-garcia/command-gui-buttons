@@ -23,7 +23,7 @@ public class ButtonGUI extends LightweightGuiDescription {
 
         setupBackground(root);
 
-        // example button to play with
+        // example button to create config JSON
         WButton button = new WButton(new TranslatableText("Serialize"));
         button.setOnClick(() -> {
             MacroButtons.printMessage();
@@ -37,14 +37,14 @@ public class ButtonGUI extends LightweightGuiDescription {
             MacroButtons.printMessage();
             ConfigFile.loadSerialization();
         });
-        root.add(button2, xValue + 2, yValue, 4, 1);
+        root.add(button2, xValue + 4, yValue, 6, 1);
 
         // read json file button
         WButton button3 = new WButton(new TranslatableText("Read command json"));
         button3.setOnClick(() -> {
             ConfigFile.readFile();
         });
-        root.add(button3, xValue + 6, yValue + 2, 4, 1);
+        root.add(button3, xValue + 10, yValue, 6, 1);
 
         // Text GUI, not needed yet
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
@@ -98,10 +98,6 @@ public class ButtonGUI extends LightweightGuiDescription {
         } else {
             xValue += 4;
         }
-    }
-
-    private int incrementNumber(int a, int b) {
-        return a+b;
     }
 
     // Change background panel color to transparent black

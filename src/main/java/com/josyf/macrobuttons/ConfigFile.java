@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.josyf.macrobuttons.gui.ButtonGUI;
 import io.netty.channel.group.ChannelGroupFuture;
 import net.minecraft.client.MinecraftClient;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.awt.*;
 import java.io.*;
 import java.util.logging.Level;
 
@@ -23,9 +25,21 @@ public class ConfigFile {
 
     public static void serializeCommand() {
         CommandObject newCommand = new CommandObject();
-        newCommand.message = "hello";
-        ButtonGUI.setConfig(JSON.toJSONString(newCommand));
-        writeToFile(ButtonGUI.getConfig());
+        newCommand.name = "Say Hello";
+        newCommand.command = "Hello";
+        // append new object to JSON file
+
+
+        // ButtonGUI.setConfig(JSON.toJSONString(newCommand));
+
+        // get instance of current config
+        String configInstance = ButtonGUI.getConfig();
+        // add new object to config
+        appendToFile(newCommand);
+
+        // set instance to real config
+
+        //writeToFile(ButtonGUI.getConfig());
     }
 
     public static void loadSerialization() {
@@ -39,11 +53,46 @@ public class ConfigFile {
         }
     }
 
+    private static void appendToFile(CommandObject commandObject) {
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = (JSONArray) parser.parse(new FileReader("commands.json"));
+            //JSONArray jsonArray = new JSONArray();
+            jsonArray.add(commandObject);
+            writeToFile(jsonArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private static void writeToFile(JSONArray jsonArray) {
+        try {
+            fileWriter = new FileWriter("commands.json");
+            String jArrayToString = JSON.toJSONString(jsonArray);
+            fileWriter.write(jArrayToString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private static void writeToFile(String jsonMessage) {
         try {
             // these both write to the correct location
             fileWriter = new FileWriter("commands.json");
             // file = new FileWriter(MinecraftClient.getInstance().runDirectory + "/command.json");
+            System.out.println("APPENDING!");
+
             fileWriter.write(jsonMessage);
         } catch (IOException e) {
             e.printStackTrace();
