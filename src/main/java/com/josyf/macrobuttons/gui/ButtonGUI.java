@@ -55,10 +55,6 @@ public class ButtonGUI extends LightweightGuiDescription {
         root.validate(this);
     }
 
-    public static void setConfig(String configSettings) {
-        ConfigSettings = configSettings;
-    }
-
     public static String getConfig() {
         return ConfigSettings;
     }
