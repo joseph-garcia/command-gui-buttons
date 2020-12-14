@@ -43,8 +43,8 @@ public class MacroButtons implements ModInitializer {
     }
 
     // player can run a command here
-    public static void printMessage() {
-        MinecraftClient.getInstance().player.sendChatMessage("/seed");
+    public static void printMessage(String savedCommand) {
+        MinecraftClient.getInstance().player.sendChatMessage(savedCommand);
     }
 
     public static void sayMessage(String message) {

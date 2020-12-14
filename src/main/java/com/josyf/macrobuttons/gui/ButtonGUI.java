@@ -27,7 +27,7 @@ public class ButtonGUI extends LightweightGuiDescription {
         // example button to create config JSON
         WButton button = new WButton(new TranslatableText("Serialize"));
         button.setOnClick(() -> {
-            MacroButtons.printMessage();
+            MacroButtons.printMessage("serializing");
             ConfigFile.serializeCommand();
         });
         root.add(button, xValue, yValue + 9, 4, 1);
@@ -35,7 +35,7 @@ public class ButtonGUI extends LightweightGuiDescription {
         // example load serialization button
         WButton button2 = new WButton(new TranslatableText("Load Serialization"));
         button2.setOnClick(() -> {
-            MacroButtons.printMessage();
+            MacroButtons.printMessage("load serialization");
             ConfigFile.loadSerialization();
         });
         root.add(button2, xValue + 4, yValue + 9, 6, 1);
@@ -65,33 +65,50 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Add text field for command NAME entry
         WTextField nameTextField = new WTextField();
         nameTextField.setSuggestion("Name");
-        root.add(nameTextField, 5, 12, 6, 1);
+        root.add(nameTextField, 0, 12, 6, 1);
 
         // Add text field for command / entry
-        WTextField textField = new WTextField();
-        textField.setSuggestion("/command");
-        root.add(textField, 11, 12, 6, 1);
+        WTextField commandTextField = new WTextField();
+        commandTextField.setSuggestion("/command");
+        commandTextField.setMaxLength(100);
+        root.add(commandTextField, 6, 12, 11, 1);
 
         // Add button for command entry
         WButton addCmdBtn = new WButton(new TranslatableText("+"));
         addCmdBtn.setOnClick(() -> {
-            addGUIButton(root, xValue);
+            addGUIButton(root, xValue, nameTextField, commandTextField);
         });
         root.add(addCmdBtn, 18, 12, 1, 1);
     }
 
-    private void addGUIButton(WGridPanel root, int x) {
-        WButton button = new WButton(new TranslatableText("Button"));
-        button.setOnClick(() -> {
-            // MacroButtons.printMessage();
-        });
-        // int newX = incrementNumber(x, 4);
-        System.out.println("x val: " + xValue);
-        System.out.println("y val: " + yValue);
+    private void addGUIButton(WGridPanel root, int x, WTextField name, WTextField command) {
+        // Only add the button if there are contents in both
+        if (!name.getText().equals("") && !command.getText().equals("")) {
 
-        root.add(button, xValue, yValue, 4, 1);
+            System.out.println("Here, command is " + command.getText());
+            String instancedString = command.getText();
 
-        adjustBounds();
+            WButton button = new WButton(new TranslatableText(name.getText()));
+            button.setOnClick(() -> {
+                MacroButtons.printMessage(instancedString);
+                System.out.println("Command was " + instancedString);
+            });
+            // int newX = incrementNumber(x, 4);
+            System.out.println("x val: " + xValue);
+            System.out.println("y val: " + yValue);
+
+            root.add(button, xValue, yValue, 4, 1);
+
+            adjustBounds();
+
+            name.setText("");
+            command.setText("");
+
+            root.validate(this);
+
+        } else {
+            System.out.println("No name and value entered!");
+        }
 
     }
 
