@@ -29,9 +29,7 @@ public class ConfigFile {
     public static void serializeCommand() {
 
         // CREATE OBJECT
-        CommandObject newCommand = new CommandObject();
-        newCommand.name = "Say Hello";
-        newCommand.command = "Hello 2";
+        CommandObject newCommand = new CommandObject("Say hello", "hello command");
 
         // add new object to config
         appendToFile(newCommand);
@@ -99,6 +97,21 @@ public class ConfigFile {
                 e.printStackTrace();
             }
         }
+    }
+
+    // TODO: create func initArray to assign global JSONArray masterCommList to commands.json
+    public static JSONArray initArray() {
+        Object obj = null;
+        try {
+            obj = parser.parse(new FileReader("commands.json"));
+            JSONArray array = (JSONArray) parser.parse(obj.toString());
+            return array;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static void writeToFile(String jsonMessage) {

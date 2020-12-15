@@ -10,15 +10,19 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import org.json.simple.JSONArray;
 import org.lwjgl.glfw.GLFW;
 
 public class MacroButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
+    public static JSONArray masterCommList;
 
     @Override
     public void onInitialize() {
         assignGuiToKey();
+        // TODO: call initArray(); here
+        initArray();
     }
 
     private void assignGuiToKey() {
@@ -37,7 +41,6 @@ public class MacroButtons implements ModInitializer {
             while (keyBinding.wasPressed()) {
                 // client.player.sendMessage(new LiteralText("Key 1 was pressed!"), false);
                 MinecraftClient.getInstance().openScreen(new ButtonGUIScreen(new ButtonGUI()));
-                // printMessage();
             }
         });
     }
@@ -51,7 +54,13 @@ public class MacroButtons implements ModInitializer {
         MinecraftClient.getInstance().player.sendChatMessage(message);
     }
 
-
+    // TODO: create func initArray to assign global JSONArray masterCommList to commands.json
+    private void initArray() {
+        masterCommList = ConfigFile.initArray();
+        if (masterCommList == null) {
+            System.out.println("Error! Master Command List is null");
+        }
+    }
 
 }
 

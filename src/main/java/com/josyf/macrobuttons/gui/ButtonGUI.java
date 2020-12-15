@@ -8,6 +8,8 @@ import io.github.cottonmc.cotton.gui.widget.WButton;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import net.minecraft.text.TranslatableText;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class ButtonGUI extends LightweightGuiDescription {
 
@@ -51,6 +53,9 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Text GUI, not needed yet
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
         // root.add(label, 0, 4, 2, 1);
+
+        // TODO: addSavedButtons();
+        addSavedButtons();
 
         addCommandSection(root);
 
@@ -111,6 +116,22 @@ public class ButtonGUI extends LightweightGuiDescription {
         }
 
     }
+
+    // TODO: addSavedButtons
+    // TODO: Iterate over masterCommList to add corresponding buttons
+    // Array will contain String class types. Convert these to objects.
+    private void addSavedButtons() {
+        JSONArray stringCommList = MacroButtons.masterCommList;
+        JSONArray objCommList;
+        // Array will contain String class types. Convert these to objects
+        for (int i = 0; i < stringCommList.size(); i++) {
+            Object anObject = stringCommList.get(i);
+            //System.out.println(stringCommList.get(i).getClass());
+            //anObject
+        }
+        // Then convert the objects to buttons
+    }
+
 
     private void adjustBounds() {
         if (xValue % 12 == 0 && xValue != 0) {
