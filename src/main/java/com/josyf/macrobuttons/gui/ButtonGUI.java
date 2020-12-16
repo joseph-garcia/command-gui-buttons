@@ -55,7 +55,7 @@ public class ButtonGUI extends LightweightGuiDescription {
         // root.add(label, 0, 4, 2, 1);
 
         // TODO: addSavedButtons();
-        addSavedButtons();
+        addSavedButtons(root);
 
         addCommandSection(root);
 
@@ -117,19 +117,46 @@ public class ButtonGUI extends LightweightGuiDescription {
 
     }
 
+    private void addGUIButton(WGridPanel root, int x, String name, String command) {
+        if (!name.equals("") && !command.equals("")) {
+
+            System.out.println("Here, command is " + command);
+            String instancedString = command;
+
+            WButton button = new WButton(new TranslatableText(name));
+            button.setOnClick(() -> {
+                MacroButtons.printMessage(instancedString);
+                System.out.println("Command was " + instancedString);
+            });
+            // int newX = incrementNumber(x, 4);
+            System.out.println("x val: " + xValue);
+            System.out.println("y val: " + yValue);
+
+            root.add(button, xValue, yValue, 4, 1);
+
+            adjustBounds();
+
+            root.validate(this);
+
+        } else {
+            System.out.println("No name and value entered!");
+        }
+    }
+
     // TODO: addSavedButtons
     // TODO: Iterate over masterCommList to add corresponding buttons
     // Array will contain String class types. Convert these to objects.
-    private void addSavedButtons() {
-        JSONArray stringCommList = MacroButtons.masterCommList;
+    private void addSavedButtons(WGridPanel root) {
+        //JSONArray stringCommList = MacroButtons.masterCommList;
         JSONArray objCommList;
         // Array will contain String class types. Convert these to objects
-        for (int i = 0; i < stringCommList.size(); i++) {
-            Object anObject = stringCommList.get(i);
-            //System.out.println(stringCommList.get(i).getClass());
-            //anObject
-        }
+        System.out.println("I be doin my thing here");
         // Then convert the objects to buttons
+        for (int i = 0; i < MacroButtons.masterCommList.size(); i++) {
+            String name = MacroButtons.masterCommList.get(i).get("name").toString();
+            String command = MacroButtons.masterCommList.get(i).get("command").toString();
+            addGUIButton(root, xValue, name, command);
+        }
     }
 
 

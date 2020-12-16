@@ -11,18 +11,26 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
 
 public class MacroButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
-    public static JSONArray masterCommList;
+    public static ArrayList<JSONObject> masterCommList;
 
     @Override
     public void onInitialize() {
         assignGuiToKey();
         // TODO: call initArray(); here
         initArray();
+    }
+
+    @Override
+    public void onQuit() {
+        
     }
 
     private void assignGuiToKey() {

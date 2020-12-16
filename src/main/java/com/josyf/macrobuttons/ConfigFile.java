@@ -1,20 +1,19 @@
 package com.josyf.macrobuttons;
 
+//import com.alibaba.fastjson.JSON;
+//import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.cedarsoftware.util.io.JsonWriter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.josyf.macrobuttons.gui.ButtonGUI;
-import io.netty.channel.group.ChannelGroupFuture;
-import net.minecraft.client.MinecraftClient;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.awt.*;
 import java.io.*;
-import java.util.logging.Level;
+import java.util.ArrayList;
 
 public class ConfigFile {
 
@@ -49,7 +48,7 @@ public class ConfigFile {
             MacroButtons.sayMessage(deserializedMessage);
         }
     }
-
+    // if commands.json exists, read it, convert it to an array, and append
     private static void appendToFile(CommandObject commandObject) {
         JSONArray jsonArray = new JSONArray();
         try {
@@ -57,14 +56,25 @@ public class ConfigFile {
 
             // if commands.json exists, read it, convert it to an array, and append
             Object obj = parser.parse(new FileReader("commands.json"));
-            JSONArray array = (JSONArray) parser.parse(obj.toString());
-            array.add(commandObject);
-            writeToFile(array);
-            System.out.println("attempting to append");
+            //ArrayList array = (ArrayList) parser.parse(obj.toString());
+            //array.add(commandObject);
+            //writeToFile(array);
+            System.out.println("Here is the object: " + obj);
+            System.out.println(obj.getClass());
+
+            JSONArray array = (JSONArray) obj;
+            System.out.println("length of array: " + array.size());
+            JSONObject obj2 = (JSONObject)array.get(0);
+            System.out.println("Qu'est-ce que c'est?");
+            System.out.println(obj2.get("name"));
 
 
-            //System.out.println(obj.getClass());
+
+            System.out.println("obj's class is: " + obj.getClass());
+            System.out.println("obj2's class is: " + obj2.getClass());
             System.out.println("Array size: " + array.size());
+
+            System.out.println(MacroButtons.masterCommList);
 
         } catch (IOException e) { // commands.json doesn't exist
             System.out.println("catch 1");
@@ -99,13 +109,25 @@ public class ConfigFile {
         }
     }
 
-    // TODO: create func initArray to assign global JSONArray masterCommList to commands.json
-    public static JSONArray initArray() {
-        Object obj = null;
+    // TODO: create func initArray to assign commands.json to global array<CommandObjects> masterCommList
+    public static ArrayList<JSONObject> initArray() {
+        ArrayList<JSONObject> commandObjects = new ArrayList<>();
         try {
-            obj = parser.parse(new FileReader("commands.json"));
-            JSONArray array = (JSONArray) parser.parse(obj.toString());
-            return array;
+            // assign array to JSONArray using our commands.json as an object
+            Object obj = parser.parse(new FileReader("commands.json"));
+            JSONArray array = (JSONArray) obj;
+            // so "array" is now a JSONArray full of JSONObjects
+            // now we will iterate through the array and add COs to our local CO array
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject childObject = (JSONObject)array.get(i);
+                //String name = childObject.get("name").toString();
+                //String command = childObject.get("command").toString();
+                //CommandObject commandObject = new CommandObject(name, command);
+                //commandObjects.add(commandObject);
+                commandObjects.add(childObject);
+                System.out.println(i);
+            }
+            return commandObjects;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -138,7 +160,8 @@ public class ConfigFile {
     public static String readFile() {
         try {
             Object obj = parser.parse(new FileReader("commands.json"));
-            String jsonString = JSONObject.toJSONString(obj);
+            String jsonString = obj.toString();
+            //String jsonString = JSONObject.toJSONString(obj);
             System.out.println(jsonString);
             return jsonString;
         } catch (FileNotFoundException e) {
