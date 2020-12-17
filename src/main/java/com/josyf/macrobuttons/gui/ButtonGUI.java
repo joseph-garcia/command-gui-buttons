@@ -1,5 +1,6 @@
 package com.josyf.macrobuttons.gui;
 
+import com.josyf.macrobuttons.CommandObject;
 import com.josyf.macrobuttons.ConfigFile;
 import com.josyf.macrobuttons.MacroButtons;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
@@ -10,6 +11,8 @@ import io.github.cottonmc.cotton.gui.widget.WTextField;
 import net.minecraft.text.TranslatableText;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.util.ArrayList;
 
 public class ButtonGUI extends LightweightGuiDescription {
 
@@ -48,13 +51,22 @@ public class ButtonGUI extends LightweightGuiDescription {
             ConfigFile.readFile();
         });
         root.add(button3, xValue + 10, yValue + 9, 6, 1);
+
+
+        // read mastercommlist
+        // read json file button
+        WButton button4 = new WButton(new TranslatableText("Read master list"));
+        button4.setOnClick(() -> {
+            System.out.println(MacroButtons.getMasterCommList());
+        });
+        root.add(button4, xValue + 10, yValue + 8, 6, 1);
+
         // ######### DEBUG BUTTONS ############
 
         // Text GUI, not needed yet
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
         // root.add(label, 0, 4, 2, 1);
 
-        // TODO: addSavedButtons();
         addSavedButtons(root);
 
         addCommandSection(root);
@@ -90,7 +102,7 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Only add the button if there are contents in both
         if (!name.getText().equals("") && !command.getText().equals("")) {
 
-            System.out.println("Here, command is " + command.getText());
+            //System.out.println("Here, command is " + command.getText());
             String instancedString = command.getText();
 
             WButton button = new WButton(new TranslatableText(name.getText()));
@@ -99,10 +111,23 @@ public class ButtonGUI extends LightweightGuiDescription {
                 System.out.println("Command was " + instancedString);
             });
             // int newX = incrementNumber(x, 4);
-            System.out.println("x val: " + xValue);
-            System.out.println("y val: " + yValue);
+            //System.out.println("x val: " + xValue);
+            //System.out.println("y val: " + yValue);
 
             root.add(button, xValue, yValue, 4, 1);
+
+            // Create a new Json command object & append to masterCommList
+            JSONObject newJsonObject = new JSONObject();
+            newJsonObject.put("name", name.getText());
+            newJsonObject.put("command", command.getText());
+            System.out.println(newJsonObject);
+
+            ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
+
+            commListCopy.add(newJsonObject);
+            System.out.println(MacroButtons.masterCommList);
+
+            MacroButtons.setMasterCommList(commListCopy);
 
             adjustBounds();
 
@@ -117,10 +142,11 @@ public class ButtonGUI extends LightweightGuiDescription {
 
     }
 
+    // function to load buttons from commands.json
     private void addGUIButton(WGridPanel root, int x, String name, String command) {
         if (!name.equals("") && !command.equals("")) {
 
-            System.out.println("Here, command is " + command);
+            //System.out.println("Here, command is " + command);
             String instancedString = command;
 
             WButton button = new WButton(new TranslatableText(name));
@@ -129,10 +155,13 @@ public class ButtonGUI extends LightweightGuiDescription {
                 System.out.println("Command was " + instancedString);
             });
             // int newX = incrementNumber(x, 4);
-            System.out.println("x val: " + xValue);
-            System.out.println("y val: " + yValue);
+            //System.out.println("x val: " + xValue);
+            //System.out.println("y val: " + yValue);
+
 
             root.add(button, xValue, yValue, 4, 1);
+
+
 
             adjustBounds();
 
@@ -143,18 +172,17 @@ public class ButtonGUI extends LightweightGuiDescription {
         }
     }
 
-    // TODO: addSavedButtons
-    // TODO: Iterate over masterCommList to add corresponding buttons
+
     // Array will contain String class types. Convert these to objects.
     private void addSavedButtons(WGridPanel root) {
         //JSONArray stringCommList = MacroButtons.masterCommList;
-        JSONArray objCommList;
+        ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
         // Array will contain String class types. Convert these to objects
         System.out.println("I be doin my thing here");
         // Then convert the objects to buttons
-        for (int i = 0; i < MacroButtons.masterCommList.size(); i++) {
-            String name = MacroButtons.masterCommList.get(i).get("name").toString();
-            String command = MacroButtons.masterCommList.get(i).get("command").toString();
+        for (int i = 0; i < commListCopy.size(); i++) {
+            String name = commListCopy.get(i).get("name").toString();
+            String command = commListCopy.get(i).get("command").toString();
             addGUIButton(root, xValue, name, command);
         }
     }

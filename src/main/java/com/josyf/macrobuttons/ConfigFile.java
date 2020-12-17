@@ -109,7 +109,6 @@ public class ConfigFile {
         }
     }
 
-    // TODO: create func initArray to assign commands.json to global array<CommandObjects> masterCommList
     public static ArrayList<JSONObject> initArray() {
         ArrayList<JSONObject> commandObjects = new ArrayList<>();
         try {
