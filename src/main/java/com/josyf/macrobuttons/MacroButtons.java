@@ -50,7 +50,7 @@ public class MacroButtons implements ModInitializer {
     }
 
     // Assign masterCommList to an array of JSON objects (from commands.json)
-    private void initArray() {
+    static void initArray() {
         masterCommList = ConfigFile.initArray();
         if (masterCommList == null) {
             System.out.println("Error! Master Command List is null");

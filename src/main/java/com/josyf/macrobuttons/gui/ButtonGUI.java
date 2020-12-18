@@ -117,13 +117,17 @@ public class ButtonGUI extends LightweightGuiDescription {
 
             ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
 
-            commListCopy.add(newJsonObject);
-            System.out.println(MacroButtons.masterCommList);
+            if (commListCopy != null) {
+                commListCopy.add(newJsonObject);
 
-            // Add jsonObject to commands.json
-            ConfigFile.appendToFile(newJsonObject);
+                // Add jsonObject to commands.json
+                ConfigFile.appendToFile(newJsonObject);
 
-            MacroButtons.setMasterCommList(commListCopy);
+                MacroButtons.setMasterCommList(commListCopy);
+            } else {
+                ConfigFile.appendToFile(newJsonObject);
+            }
+
 
             adjustBounds();
 
@@ -176,11 +180,14 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Array will contain String class types. Convert these to objects
         System.out.println("I be doin my thing here");
         // Then convert the objects to buttons
-        for (int i = 0; i < commListCopy.size(); i++) {
-            String name = commListCopy.get(i).get("name").toString();
-            String command = commListCopy.get(i).get("command").toString();
-            addGUIButton(root, xValue, name, command);
+        if (commListCopy != null) {
+            for (int i = 0; i < commListCopy.size(); i++) {
+                String name = commListCopy.get(i).get("name").toString();
+                String command = commListCopy.get(i).get("command").toString();
+                addGUIButton(root, xValue, name, command);
+            }
         }
+
     }
 
 

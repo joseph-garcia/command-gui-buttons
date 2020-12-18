@@ -65,8 +65,14 @@ public class ConfigFile {
             JSONArray array = (JSONArray) obj;
             array.add(jsonObject);
             writeToFile(array);
+            MacroButtons.initArray();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Commands.json doesn't exist. Creating one...!");
+            // create json
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(jsonObject);
+            writeToFile(jsonArray);
+            MacroButtons.initArray();
         } catch (ParseException e) {
             e.printStackTrace();
         }
