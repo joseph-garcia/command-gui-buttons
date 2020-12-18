@@ -17,61 +17,19 @@ public class ButtonGUI extends LightweightGuiDescription {
     int xValue = 0;
     int yValue = 1;
 
-    private static String ConfigSettings = ConfigFile.readFile();
-
     public ButtonGUI() {
 
         // initialize root panel of GUI
         WGridPanel root = new WGridPanel();
-
         setupBackground(root);
-
-        // ######### DEBUG BUTTONS ############
-        // example button to create config JSON
-        WButton button = new WButton(new TranslatableText("Serialize"));
-        button.setOnClick(() -> {
-            ConfigFile.serializeCommand();
-        });
-        root.add(button, xValue, yValue + 9, 4, 1);
-
-        // example load serialization button
-        WButton button2 = new WButton(new TranslatableText("Load Serialization"));
-        button2.setOnClick(() -> {
-            ConfigFile.loadSerialization();
-        });
-        root.add(button2, xValue + 4, yValue + 9, 6, 1);
-
-        // read json file button
-        WButton button3 = new WButton(new TranslatableText("Read command json"));
-        button3.setOnClick(() -> {
-            ConfigFile.readFile();
-        });
-        root.add(button3, xValue + 10, yValue + 9, 6, 1);
-
-
-        // read mastercommlist
-        // read json file button
-        WButton button4 = new WButton(new TranslatableText("Read master list"));
-        button4.setOnClick(() -> {
-            System.out.println(MacroButtons.getMasterCommList());
-        });
-        root.add(button4, xValue + 10, yValue + 8, 6, 1);
-
-        // ######### DEBUG BUTTONS ############
 
         // Text GUI, not needed yet
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
         // root.add(label, 0, 4, 2, 1);
 
         addSavedButtons(root);
-
         addCommandSection(root);
-
         root.validate(this);
-    }
-
-    public static String getConfig() {
-        return ConfigSettings;
     }
 
     private void addCommandSection(WGridPanel root) {
