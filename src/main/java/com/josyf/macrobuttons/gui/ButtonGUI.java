@@ -35,6 +35,7 @@ public class ButtonGUI extends LightweightGuiDescription {
     private void addCommandSection(WGridPanel root) {
         // Add text field for command NAME entry
         WTextField nameTextField = new WTextField();
+        nameTextField.setMaxLength(10);
         nameTextField.setSuggestion("Name");
         root.add(nameTextField, 0, 12, 6, 1);
 
@@ -57,23 +58,25 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Only add the button if there are contents in both
         if (!name.getText().equals("") && !command.getText().equals("")) {
 
-            String commandString = command.getText();
-            WButton button = new WButton(new TranslatableText(name.getText()));
-            button.setOnClick(() -> {
-                MacroButtons.runCommand(commandString);
-            });
-            root.add(button, xValue, yValue, 4, 1);
+            if (!isListTooLong()) {
+                String commandString = command.getText();
+                WButton button = new WButton(new TranslatableText(name.getText()));
+                button.setOnClick(() -> {
+                    MacroButtons.runCommand(commandString);
+                });
+                root.add(button, xValue, yValue, 4, 1);
 
-            // Create a new Json object & append to masterCommList
-            JSONObject newJsonObject = new JSONObject();
-            newJsonObject.put("name", name.getText());
-            newJsonObject.put("command", command.getText());
+                // Create a new Json object & append to masterCommList
+                JSONObject newJsonObject = new JSONObject();
+                newJsonObject.put("name", name.getText());
+                newJsonObject.put("command", command.getText());
 
-            // append the buttons to masterList for future loading
-            ConfigFile.addObjectToCommList(newJsonObject);
-            ConfigFile.appendToFile(newJsonObject);
+                // append the buttons to masterList for future loading
+                ConfigFile.addObjectToCommList(newJsonObject);
+                ConfigFile.appendToFile(newJsonObject);
 
-            adjustBounds();
+                adjustBounds();
+            }
 
             name.setText("");
             command.setText("");
@@ -125,6 +128,10 @@ public class ButtonGUI extends LightweightGuiDescription {
         } else {
             xValue += 4;
         }
+    }
+
+    private boolean isListTooLong() {
+        return MacroButtons.getMasterCommList().size() > 19;
     }
 
     // Change background panel color to transparent black
