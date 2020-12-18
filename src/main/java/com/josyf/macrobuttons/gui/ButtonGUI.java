@@ -1,6 +1,5 @@
 package com.josyf.macrobuttons.gui;
 
-import com.josyf.macrobuttons.CommandObject;
 import com.josyf.macrobuttons.ConfigFile;
 import com.josyf.macrobuttons.MacroButtons;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
@@ -9,7 +8,6 @@ import io.github.cottonmc.cotton.gui.widget.WButton;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import net.minecraft.text.TranslatableText;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -32,7 +30,6 @@ public class ButtonGUI extends LightweightGuiDescription {
         // example button to create config JSON
         WButton button = new WButton(new TranslatableText("Serialize"));
         button.setOnClick(() -> {
-            MacroButtons.printMessage("serializing");
             ConfigFile.serializeCommand();
         });
         root.add(button, xValue, yValue + 9, 4, 1);
@@ -40,7 +37,6 @@ public class ButtonGUI extends LightweightGuiDescription {
         // example load serialization button
         WButton button2 = new WButton(new TranslatableText("Load Serialization"));
         button2.setOnClick(() -> {
-            MacroButtons.printMessage("load serialization");
             ConfigFile.loadSerialization();
         });
         root.add(button2, xValue + 4, yValue + 9, 6, 1);
@@ -98,6 +94,7 @@ public class ButtonGUI extends LightweightGuiDescription {
         root.add(addCmdBtn, 18, 12, 1, 1);
     }
 
+    // function to save newly added buttons to commands.json
     private void addGUIButton(WGridPanel root, int x, WTextField name, WTextField command) {
         // Only add the button if there are contents in both
         if (!name.getText().equals("") && !command.getText().equals("")) {
@@ -107,25 +104,24 @@ public class ButtonGUI extends LightweightGuiDescription {
 
             WButton button = new WButton(new TranslatableText(name.getText()));
             button.setOnClick(() -> {
-                MacroButtons.printMessage(instancedString);
                 System.out.println("Command was " + instancedString);
+                MacroButtons.runCommand(instancedString);
             });
-            // int newX = incrementNumber(x, 4);
-            //System.out.println("x val: " + xValue);
-            //System.out.println("y val: " + yValue);
 
             root.add(button, xValue, yValue, 4, 1);
 
-            // Create a new Json command object & append to masterCommList
+            // Create a new Json object & append to masterCommList
             JSONObject newJsonObject = new JSONObject();
             newJsonObject.put("name", name.getText());
             newJsonObject.put("command", command.getText());
-            System.out.println(newJsonObject);
 
             ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
 
             commListCopy.add(newJsonObject);
             System.out.println(MacroButtons.masterCommList);
+
+            // Add jsonObject to commands.json
+            ConfigFile.appendToFile(newJsonObject);
 
             MacroButtons.setMasterCommList(commListCopy);
 
@@ -151,8 +147,8 @@ public class ButtonGUI extends LightweightGuiDescription {
 
             WButton button = new WButton(new TranslatableText(name));
             button.setOnClick(() -> {
-                MacroButtons.printMessage(instancedString);
                 System.out.println("Command was " + instancedString);
+                MacroButtons.runCommand(instancedString);
             });
             // int newX = incrementNumber(x, 4);
             //System.out.println("x val: " + xValue);

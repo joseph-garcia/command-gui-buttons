@@ -14,8 +14,6 @@ import org.json.simple.JSONObject;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MacroButtons implements ModInitializer {
 
@@ -29,11 +27,7 @@ public class MacroButtons implements ModInitializer {
     }
 
 
-
     private void assignGuiToKey() {
-
-        System.out.println("I'm getting here");
-
         // Currently assigns to the G key
         KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.macrobuttons.opengui", // The translation key of the keybinding's name
@@ -51,15 +45,11 @@ public class MacroButtons implements ModInitializer {
         });
     }
 
-    // player can run a command here
-    public static void printMessage(String savedCommand) {
-        MinecraftClient.getInstance().player.sendChatMessage(savedCommand);
+    public static void runCommand(String command) {
+        MinecraftClient.getInstance().player.sendChatMessage(command);
     }
 
-    public static void sayMessage(String message) {
-        MinecraftClient.getInstance().player.sendChatMessage(message);
-    }
-
+    // Assign masterCommList to an array of JSON objects (from commands.json)
     private void initArray() {
         masterCommList = ConfigFile.initArray();
         if (masterCommList == null) {
