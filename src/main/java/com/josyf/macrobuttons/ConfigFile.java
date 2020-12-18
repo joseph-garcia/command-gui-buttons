@@ -15,21 +15,18 @@ public class ConfigFile {
     static JSONParser parser = new JSONParser();
     private static FileWriter fileWriter;
 
-    // if command.json exists, read it, convert it to an array, and append A JSON OBJECT
+    // Read commands.json, convert it to an array, and append A JSON OBJECT
     public static void appendToFile(JSONObject jsonObject) {
         try {
             Object obj = parser.parse(new FileReader("commands.json"));
             JSONArray array = (JSONArray) obj;
             array.add(jsonObject);
             writeToFile(array);
-            MacroButtons.initArray();
         } catch (IOException e) {
             System.out.println("Commands.json doesn't exist. Creating one...!");
-            // create json
             JSONArray jsonArray = new JSONArray();
             jsonArray.add(jsonObject);
             writeToFile(jsonArray);
-            MacroButtons.initArray();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -55,7 +52,7 @@ public class ConfigFile {
     }
 
     // parses commands.json into array, loop through array and add JSONObjects. returns array
-    public static ArrayList<JSONObject> initArray() {
+    public static ArrayList<JSONObject> getArrayFromJsonFile() {
         ArrayList<JSONObject> commandObjects = new ArrayList<>();
         try {
             // assign array to JSONArray using our commands.json as an object

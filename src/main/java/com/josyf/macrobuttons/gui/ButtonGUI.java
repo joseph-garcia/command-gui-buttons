@@ -62,7 +62,6 @@ public class ButtonGUI extends LightweightGuiDescription {
 
             WButton button = new WButton(new TranslatableText(name.getText()));
             button.setOnClick(() -> {
-                System.out.println("Command was " + instancedString);
                 MacroButtons.runCommand(instancedString);
             });
 
@@ -75,17 +74,9 @@ public class ButtonGUI extends LightweightGuiDescription {
 
             ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
 
-            if (commListCopy != null) {
-                commListCopy.add(newJsonObject);
-
-                // Add jsonObject to commands.json
-                ConfigFile.appendToFile(newJsonObject);
-
-                MacroButtons.setMasterCommList(commListCopy);
-            } else {
-                ConfigFile.appendToFile(newJsonObject);
-            }
-
+            commListCopy.add(newJsonObject);
+            MacroButtons.setMasterCommList(commListCopy);
+            ConfigFile.appendToFile(newJsonObject);
 
             adjustBounds();
 
@@ -109,20 +100,11 @@ public class ButtonGUI extends LightweightGuiDescription {
 
             WButton button = new WButton(new TranslatableText(name));
             button.setOnClick(() -> {
-                System.out.println("Command was " + instancedString);
                 MacroButtons.runCommand(instancedString);
             });
-            // int newX = incrementNumber(x, 4);
-            //System.out.println("x val: " + xValue);
-            //System.out.println("y val: " + yValue);
-
 
             root.add(button, xValue, yValue, 4, 1);
-
-
-
             adjustBounds();
-
             root.validate(this);
 
         } else {
@@ -136,7 +118,6 @@ public class ButtonGUI extends LightweightGuiDescription {
         //JSONArray stringCommList = MacroButtons.masterCommList;
         ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
         // Array will contain String class types. Convert these to objects
-        System.out.println("I be doin my thing here");
         // Then convert the objects to buttons
         if (commListCopy != null) {
             for (int i = 0; i < commListCopy.size(); i++) {

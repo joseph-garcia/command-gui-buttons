@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class MacroButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
-    public static ArrayList<JSONObject> masterCommList;
+    private static ArrayList<JSONObject> masterCommList;
 
     @Override
     public void onInitialize() {
@@ -38,7 +38,6 @@ public class MacroButtons implements ModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyBinding.wasPressed()) {
-                System.out.println("Key 1 was pressed!");
                 MinecraftClient.getInstance().openScreen(new ButtonGUIScreen(new ButtonGUI()));
                 //client.player.closeScreen();
             }
@@ -49,11 +48,12 @@ public class MacroButtons implements ModInitializer {
         MinecraftClient.getInstance().player.sendChatMessage(command);
     }
 
-    // Assign masterCommList to an array of JSON objects (from commands.json)
+    // Assign masterCommList to JSONArray<objects> (from commands.json). Runs once.
     static void initArray() {
-        masterCommList = ConfigFile.initArray();
+        masterCommList = ConfigFile.getArrayFromJsonFile();
+        // If commands.json doesn't exist yet, start a global list variable for future creation
         if (masterCommList == null) {
-            System.out.println("Error! Master Command List is null");
+            setMasterCommList(new ArrayList<>());
         }
     }
 
