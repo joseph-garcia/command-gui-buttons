@@ -64,6 +64,7 @@ public class ConfigFile {
                 JSONObject childObject = (JSONObject)array.get(i);
                 commandObjects.add(childObject);
                 System.out.println(i);
+                if (i >= 19) break;
             }
             return commandObjects;
         } catch (IOException e) {
@@ -72,5 +73,14 @@ public class ConfigFile {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void addObjectToCommList(JSONObject jsonObject) {
+        ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
+        if (commListCopy.size() <= 20) {
+            commListCopy.add(jsonObject);
+            MacroButtons.setMasterCommList(commListCopy);
+        }
+
     }
 }
