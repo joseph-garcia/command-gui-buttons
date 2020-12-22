@@ -4,9 +4,7 @@ import com.josyf.macrobuttons.ConfigFile;
 import com.josyf.macrobuttons.MacroButtons;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
-import io.github.cottonmc.cotton.gui.widget.WButton;
-import io.github.cottonmc.cotton.gui.widget.WGridPanel;
-import io.github.cottonmc.cotton.gui.widget.WTextField;
+import io.github.cottonmc.cotton.gui.widget.*;
 import net.minecraft.text.TranslatableText;
 import org.json.simple.JSONObject;
 
@@ -27,12 +25,20 @@ public class ButtonGUI extends LightweightGuiDescription {
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
         // root.add(label, 0, 4, 2, 1);
 
-        addSavedButtons(root);
-        addCommandSection(root);
+
+
+        WToggleButton delToggle = new WToggleButton(new TranslatableText("-"));
+//        delBtn.onClick(() -> {
+//            System.out.println("Deleting");
+//        });
+        root.add(delToggle, 18, 0, 1, 1);
+
+        addSavedButtons(root, delToggle);
+        addCommandSection(root, delToggle);
         root.validate(this);
     }
 
-    private void addCommandSection(WGridPanel root) {
+    private void addCommandSection(WGridPanel root, WToggleButton toggle) {
         // Add text field for command NAME entry
         WTextField nameTextField = new WTextField();
         nameTextField.setMaxLength(10);
@@ -48,13 +54,13 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Add button for command entry
         WButton addCmdBtn = new WButton(new TranslatableText("+"));
         addCmdBtn.setOnClick(() -> {
-            addGUIButton(root, nameTextField, commandTextField);
+            addGUIButton(root, nameTextField, commandTextField, toggle);
         });
         root.add(addCmdBtn, 18, 12, 1, 1);
     }
 
     // Function to save newly added buttons to commands.json
-    private void addGUIButton(WGridPanel root, WTextField name, WTextField command) {
+    private void addGUIButton(WGridPanel root, WTextField name, WTextField command, WToggleButton isDeleteToggled) {
         // Only add the button if there are contents in both
         if (!name.getText().equals("") && !command.getText().equals("")) {
 
@@ -62,7 +68,12 @@ public class ButtonGUI extends LightweightGuiDescription {
                 String commandString = command.getText();
                 WButton button = new WButton(new TranslatableText(name.getText()));
                 button.setOnClick(() -> {
-                    MacroButtons.runCommand(commandString);
+                    if (isDeleteToggled.getToggle()) {
+                        System.out.println("Should delete " + button.getLabel());
+                    } else {
+                        MacroButtons.runCommand(commandString);
+                    }
+
                 });
                 root.add(button, xValue, yValue, 4, 1);
 
@@ -90,11 +101,16 @@ public class ButtonGUI extends LightweightGuiDescription {
     }
 
     // function to load buttons from commands.json
-    private void addGUIButton(WGridPanel root, String name, String command) {
+    private void addGUIButton(WGridPanel root, String name, String command, WToggleButton isDeleteToggled) {
         if (!name.equals("") && !command.equals("")) {
             WButton button = new WButton(new TranslatableText(name));
             button.setOnClick(() -> {
-                MacroButtons.runCommand(command);
+                if (isDeleteToggled.getToggle()) {
+                    System.out.println("Should delete " + button.getLabel());
+                } else {
+                    MacroButtons.runCommand(command);
+                }
+
             });
             root.add(button, xValue, yValue, 4, 1);
             adjustBounds();
@@ -106,14 +122,14 @@ public class ButtonGUI extends LightweightGuiDescription {
 
 
     // Array will contain String class types. Convert these to objects.
-    private void addSavedButtons(WGridPanel root) {
+    private void addSavedButtons(WGridPanel root, WToggleButton toggle) {
         ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
         // Then convert the objects to buttons
         if (commListCopy != null) {
             for (int i = 0; i < commListCopy.size(); i++) {
                 String name = commListCopy.get(i).get("name").toString();
                 String command = commListCopy.get(i).get("command").toString();
-                addGUIButton(root, name, command);
+                addGUIButton(root, name, command, toggle);
                 if (i >= 19) break;
             }
         }
