@@ -20,6 +20,10 @@ public class MacroButtons implements ModInitializer {
     public static final String MOD_ID = "mgbuttons";
     private static ArrayList<JSONObject> masterCommList;
 
+    public static void main(String[] args) {
+
+    }
+
     @Override
     public void onInitialize() {
         assignGuiToKey();

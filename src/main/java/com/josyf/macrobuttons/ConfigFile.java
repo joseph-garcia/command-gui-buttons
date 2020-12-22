@@ -4,16 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.cedarsoftware.util.io.JsonWriter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.json.simple.parser.*;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class ConfigFile {
 
-    static JSONParser parser = new JSONParser();
+    private static final JSONParser parser = new JSONParser();
     private static FileWriter fileWriter;
+
 
     // Read commands.json, convert it to an array, and append A JSON OBJECT
     public static void appendToFile(JSONObject jsonObject) {
@@ -80,6 +81,8 @@ public class ConfigFile {
         commListCopy.add(jsonObject);
         MacroButtons.setMasterCommList(commListCopy);
     }
+
+
 
 
 }

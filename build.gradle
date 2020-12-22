@@ -15,6 +15,7 @@ repositories {
 		name = "CottonMC"
 		url = "https://server.bbkr.space/artifactory/libs-release"
 	}
+	jcenter()
 }
 
 dependencies {
@@ -28,16 +29,22 @@ dependencies {
 
 	// Serialization
 	compile group: 'com.alibaba', name: 'fastjson', version: '1.2.56'
-	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+	compile 'com.googlecode.json-simple:json-simple:1.1.1'
+
 
 	implementation 'com.cedarsoftware:json-io:4.10.1'
+
+	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+	// includes
+	include 'com.alibaba:fastjson:1.2.56'
+	include 'com.googlecode.json-simple:json-simple:1.1.1'
+	include 'com.cedarsoftware:json-io:4.10.1'
 
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
-	dependencies {
-		modImplementation "io.github.cottonmc:LibGui:3.2.2+1.16.3"
-	}
+	modImplementation "io.github.cottonmc:LibGui:3.2.2+1.16.3"
 }
 
 processResources {
@@ -81,9 +88,5 @@ publishing {
 		}
 	}
 
-	// select the repositories you want to publish to
-	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
-	}
+
 }

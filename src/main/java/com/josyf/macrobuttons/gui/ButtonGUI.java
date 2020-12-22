@@ -71,7 +71,7 @@ public class ButtonGUI extends LightweightGuiDescription {
                 newJsonObject.put("name", name.getText());
                 newJsonObject.put("command", command.getText());
 
-                // append the buttons to masterList for future loading
+//                // append the buttons to masterList for future loading
                 ConfigFile.addObjectToCommList(newJsonObject);
                 ConfigFile.appendToFile(newJsonObject);
 
