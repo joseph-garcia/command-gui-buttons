@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "mgbuttons",
+  "id": "macro-gui-buttons",
   "version": "${version}",
 
   "name": "Macro GUI Buttons",

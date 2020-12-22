@@ -10,21 +10,28 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import org.json.simple.JSONObject;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
 
 public class MacroButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
+    private static ArrayList<JSONObject> masterCommList;
+
+    public static void main(String[] args) {
+
+    }
 
     @Override
     public void onInitialize() {
         assignGuiToKey();
+        initArray();
     }
 
+
     private void assignGuiToKey() {
-
-        System.out.println("I'm getting here");
-
         // Currently assigns to the G key
         KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.macrobuttons.opengui", // The translation key of the keybinding's name
@@ -35,23 +42,32 @@ public class MacroButtons implements ModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyBinding.wasPressed()) {
-                // client.player.sendMessage(new LiteralText("Key 1 was pressed!"), false);
                 MinecraftClient.getInstance().openScreen(new ButtonGUIScreen(new ButtonGUI()));
-                // printMessage();
+                //client.player.closeScreen();
             }
         });
     }
 
-    // player can run a command here
-    public static void printMessage() {
-        MinecraftClient.getInstance().player.sendChatMessage("/seed");
+    public static void runCommand(String command) {
+        MinecraftClient.getInstance().player.sendChatMessage(command);
     }
 
-    public static void sayMessage(String message) {
-        MinecraftClient.getInstance().player.sendChatMessage(message);
+    // Assign masterCommList to JSONArray<objects> (from commands.json). Runs once.
+    static void initArray() {
+        masterCommList = ConfigFile.getArrayFromJsonFile();
+        // If commands.json doesn't exist yet, start a global list variable for future creation
+        if (masterCommList == null) {
+            setMasterCommList(new ArrayList<>());
+        }
     }
 
+    public static ArrayList<JSONObject> getMasterCommList() {
+        return masterCommList;
+    }
 
+    public static void setMasterCommList(ArrayList<JSONObject> commList) {
+        masterCommList = commList;
+    }
 
 }
 

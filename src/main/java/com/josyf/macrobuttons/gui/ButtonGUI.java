@@ -8,84 +8,118 @@ import io.github.cottonmc.cotton.gui.widget.WButton;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import net.minecraft.text.TranslatableText;
+import org.json.simple.JSONObject;
+
+import java.util.ArrayList;
 
 public class ButtonGUI extends LightweightGuiDescription {
 
     int xValue = 0;
     int yValue = 1;
 
-    private static String ConfigSettings = ConfigFile.readFile();
-
     public ButtonGUI() {
 
         // initialize root panel of GUI
         WGridPanel root = new WGridPanel();
-
         setupBackground(root);
-
-        // example button to create config JSON
-        WButton button = new WButton(new TranslatableText("Serialize"));
-        button.setOnClick(() -> {
-            MacroButtons.printMessage();
-            ConfigFile.serializeCommand();
-        });
-        root.add(button, xValue, yValue, 4, 1);
-
-        // example load serialization button
-        WButton button2 = new WButton(new TranslatableText("Load Serialization"));
-        button2.setOnClick(() -> {
-            MacroButtons.printMessage();
-            ConfigFile.loadSerialization();
-        });
-        root.add(button2, xValue + 4, yValue, 6, 1);
-
-        // read json file button
-        WButton button3 = new WButton(new TranslatableText("Read command json"));
-        button3.setOnClick(() -> {
-            ConfigFile.readFile();
-        });
-        root.add(button3, xValue + 10, yValue, 6, 1);
 
         // Text GUI, not needed yet
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
         // root.add(label, 0, 4, 2, 1);
 
+        addSavedButtons(root);
         addCommandSection(root);
-
         root.validate(this);
     }
 
-    public static String getConfig() {
-        return ConfigSettings;
-    }
-
     private void addCommandSection(WGridPanel root) {
-        // Add text field for command entry
-        WTextField textField = new WTextField();
-        root.add(textField, 6, 12, 6, 1);
+        // Add text field for command NAME entry
+        WTextField nameTextField = new WTextField();
+        nameTextField.setMaxLength(10);
+        nameTextField.setSuggestion("Name");
+        root.add(nameTextField, 0, 12, 6, 1);
+
+        // Add text field for command / entry
+        WTextField commandTextField = new WTextField();
+        commandTextField.setSuggestion("/command");
+        commandTextField.setMaxLength(100);
+        root.add(commandTextField, 6, 12, 11, 1);
 
         // Add button for command entry
         WButton addCmdBtn = new WButton(new TranslatableText("+"));
         addCmdBtn.setOnClick(() -> {
-            addGUIButton(root, xValue);
+            addGUIButton(root, nameTextField, commandTextField);
         });
-        root.add(addCmdBtn, 13, 12, 1, 1);
+        root.add(addCmdBtn, 18, 12, 1, 1);
     }
 
-    private void addGUIButton(WGridPanel root, int x) {
-        WButton button = new WButton(new TranslatableText("Button"));
-        button.setOnClick(() -> {
-            // MacroButtons.printMessage();
-        });
-        // int newX = incrementNumber(x, 4);
-        System.out.println("x val: " + xValue);
-        System.out.println("y val: " + yValue);
+    // Function to save newly added buttons to commands.json
+    private void addGUIButton(WGridPanel root, WTextField name, WTextField command) {
+        // Only add the button if there are contents in both
+        if (!name.getText().equals("") && !command.getText().equals("")) {
 
-        root.add(button, xValue, yValue, 4, 1);
+            if (!isListTooLong()) {
+                String commandString = command.getText();
+                WButton button = new WButton(new TranslatableText(name.getText()));
+                button.setOnClick(() -> {
+                    MacroButtons.runCommand(commandString);
+                });
+                root.add(button, xValue, yValue, 4, 1);
 
-        adjustBounds();
+                // Create a new Json object & append to masterCommList
+                JSONObject newJsonObject = new JSONObject();
+                newJsonObject.put("name", name.getText());
+                newJsonObject.put("command", command.getText());
+
+//                // append the buttons to masterList for future loading
+                ConfigFile.addObjectToCommList(newJsonObject);
+                ConfigFile.appendToFile(newJsonObject);
+
+                adjustBounds();
+            }
+
+            name.setText("");
+            command.setText("");
+
+            root.validate(this);
+
+        } else {
+            System.out.println("No name and value entered!");
+        }
 
     }
+
+    // function to load buttons from commands.json
+    private void addGUIButton(WGridPanel root, String name, String command) {
+        if (!name.equals("") && !command.equals("")) {
+            WButton button = new WButton(new TranslatableText(name));
+            button.setOnClick(() -> {
+                MacroButtons.runCommand(command);
+            });
+            root.add(button, xValue, yValue, 4, 1);
+            adjustBounds();
+            root.validate(this);
+        } else {
+            System.out.println("No name and value entered!");
+        }
+    }
+
+
+    // Array will contain String class types. Convert these to objects.
+    private void addSavedButtons(WGridPanel root) {
+        ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
+        // Then convert the objects to buttons
+        if (commListCopy != null) {
+            for (int i = 0; i < commListCopy.size(); i++) {
+                String name = commListCopy.get(i).get("name").toString();
+                String command = commListCopy.get(i).get("command").toString();
+                addGUIButton(root, name, command);
+                if (i >= 19) break;
+            }
+        }
+
+    }
+
 
     private void adjustBounds() {
         if (xValue % 12 == 0 && xValue != 0) {
@@ -94,6 +128,10 @@ public class ButtonGUI extends LightweightGuiDescription {
         } else {
             xValue += 4;
         }
+    }
+
+    private boolean isListTooLong() {
+        return MacroButtons.getMasterCommList().size() > 19;
     }
 
     // Change background panel color to transparent black
@@ -105,7 +143,7 @@ public class ButtonGUI extends LightweightGuiDescription {
 
     private void setupBackground(WGridPanel root) {
         setRootPanel(root);
-        root.setSize(300, 240);
+        root.setSize(350, 240);
     }
 
 
