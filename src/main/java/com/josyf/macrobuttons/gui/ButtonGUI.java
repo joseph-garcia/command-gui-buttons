@@ -5,6 +5,7 @@ import com.josyf.macrobuttons.MacroButtons;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import org.json.simple.JSONObject;
 
@@ -25,13 +26,9 @@ public class ButtonGUI extends LightweightGuiDescription {
         // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
         // root.add(label, 0, 4, 2, 1);
 
-
-
-        WToggleButton delToggle = new WToggleButton(new TranslatableText("-"));
-//        delBtn.onClick(() -> {
-//            System.out.println("Deleting");
-//        });
-        root.add(delToggle, 18, 0, 1, 1);
+        // Add delete toggle button
+        WToggleButton delToggle = new WToggleButton(new TranslatableText("Delete"));
+        root.add(delToggle, 17, 0, 3, 1);
 
         addSavedButtons(root, delToggle);
         addCommandSection(root, delToggle);
@@ -63,6 +60,10 @@ public class ButtonGUI extends LightweightGuiDescription {
     private void addGUIButton(WGridPanel root, WTextField name, WTextField command, WToggleButton isDeleteToggled) {
         // Only add the button if there are contents in both
         if (!name.getText().equals("") && !command.getText().equals("")) {
+            // Create a new Json object & append to masterCommList
+            JSONObject newJsonObject = new JSONObject();
+            newJsonObject.put("name", name.getText());
+            newJsonObject.put("command", command.getText());
 
             if (!isListTooLong()) {
                 String commandString = command.getText();
@@ -70,6 +71,8 @@ public class ButtonGUI extends LightweightGuiDescription {
                 button.setOnClick(() -> {
                     if (isDeleteToggled.getToggle()) {
                         System.out.println("Should delete " + button.getLabel());
+                        ConfigFile.removeObject(newJsonObject);
+                        root.remove(button);
                     } else {
                         MacroButtons.runCommand(commandString);
                     }
@@ -77,12 +80,7 @@ public class ButtonGUI extends LightweightGuiDescription {
                 });
                 root.add(button, xValue, yValue, 4, 1);
 
-                // Create a new Json object & append to masterCommList
-                JSONObject newJsonObject = new JSONObject();
-                newJsonObject.put("name", name.getText());
-                newJsonObject.put("command", command.getText());
-
-//                // append the buttons to masterList for future loading
+                // append the buttons to masterList for future loading
                 ConfigFile.addObjectToCommList(newJsonObject);
                 ConfigFile.appendToFile(newJsonObject);
 
@@ -101,12 +99,14 @@ public class ButtonGUI extends LightweightGuiDescription {
     }
 
     // function to load buttons from commands.json
-    private void addGUIButton(WGridPanel root, String name, String command, WToggleButton isDeleteToggled) {
+    private void addGUIButton(WGridPanel root, String name, String command, WToggleButton isDeleteToggled, JSONObject object) {
         if (!name.equals("") && !command.equals("")) {
             WButton button = new WButton(new TranslatableText(name));
             button.setOnClick(() -> {
                 if (isDeleteToggled.getToggle()) {
                     System.out.println("Should delete " + button.getLabel());
+                    ConfigFile.removeObject(object);
+                    root.remove(button);
                 } else {
                     MacroButtons.runCommand(command);
                 }
@@ -127,9 +127,10 @@ public class ButtonGUI extends LightweightGuiDescription {
         // Then convert the objects to buttons
         if (commListCopy != null) {
             for (int i = 0; i < commListCopy.size(); i++) {
+                JSONObject object = commListCopy.get(i);
                 String name = commListCopy.get(i).get("name").toString();
                 String command = commListCopy.get(i).get("command").toString();
-                addGUIButton(root, name, command, toggle);
+                addGUIButton(root, name, command, toggle, object);
                 if (i >= 19) break;
             }
         }

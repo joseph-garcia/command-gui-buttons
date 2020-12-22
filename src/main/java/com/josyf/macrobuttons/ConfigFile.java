@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import org.json.simple.parser.*;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ConfigFile {
@@ -28,6 +29,17 @@ public class ConfigFile {
             jsonArray.add(jsonObject);
             writeToFile(jsonArray);
         } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeFromFile(JSONObject jsonObject) {
+        try {
+            Object obj = parser.parse(new FileReader("commands.json"));
+            JSONArray array = (JSONArray) obj;
+            array.remove(jsonObject);
+            writeToFile(array);
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }
@@ -79,6 +91,17 @@ public class ConfigFile {
         ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
         commListCopy.add(jsonObject);
         MacroButtons.setMasterCommList(commListCopy);
+    }
+
+    public static void removeObject(JSONObject objToRemove) {
+        // get masterCommList and remove object from list
+        ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
+        commListCopy.remove(objToRemove);
+
+        // get commands.json
+        // remove corresponding button from json
+        removeFromFile(objToRemove);
+
     }
 
 
