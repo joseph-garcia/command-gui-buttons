@@ -70,7 +70,6 @@ public class ButtonGUI extends LightweightGuiDescription {
                 WButton button = new WButton(new TranslatableText(name.getText()));
                 button.setOnClick(() -> {
                     if (isDeleteToggled.getToggle()) {
-                        System.out.println("Should delete " + button.getLabel());
                         ConfigFile.removeObject(newJsonObject);
                         root.remove(button);
                     } else {
@@ -104,7 +103,6 @@ public class ButtonGUI extends LightweightGuiDescription {
             WButton button = new WButton(new TranslatableText(name));
             button.setOnClick(() -> {
                 if (isDeleteToggled.getToggle()) {
-                    System.out.println("Should delete " + button.getLabel());
                     ConfigFile.removeObject(object);
                     root.remove(button);
                 } else {
