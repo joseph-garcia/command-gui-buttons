@@ -37,14 +37,14 @@ public class ButtonGUI extends LightweightGuiDescription {
     private void addCommandSection(WGridPanel root, WToggleButton toggle) {
         // Add text field for command NAME entry
         WTextField nameTextField = new WTextField();
-        nameTextField.setMaxLength(10);
+        nameTextField.setMaxLength(11);
         nameTextField.setSuggestion("Name");
         root.add(nameTextField, 0, 12, 6, 1);
 
         // Add text field for command / entry
         WTextField commandTextField = new WTextField();
         commandTextField.setSuggestion("/command");
-        commandTextField.setMaxLength(100);
+        commandTextField.setMaxLength(300);
         root.add(commandTextField, 6, 12, 11, 1);
 
         // Add button for command entry
