@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "macro-gui-buttons",
+  "id": "command-gui-buttons",
   "version": "${version}",
 
-  "name": "Macro GUI Buttons",
-  "description": "Create GUI buttons in-game to execute macro commands.",
+  "name": "Command GUI Buttons",
+  "description": "Create GUI buttons in-game to execute commands.",
   "authors": [
     "JosephG"
   ],
   "contact": {
     "homepage": "",
-    "sources": "https://github.com/joseph-garcia/macro-gui-buttons"
+    "sources": "https://github.com/joseph-garcia/command-gui-buttons"
   },
 
   "license": "gpl-3.0",
@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.josyf.macrobuttons.MacroButtons"
+      "com.josyf.commandbuttons.CommandButtons"
     ]
   },
   "mixins": [

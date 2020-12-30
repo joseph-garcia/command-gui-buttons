@@ -1,4 +1,4 @@
-package com.josyf.macrobuttons;
+package com.josyf.commandbuttons;
 
 import com.alibaba.fastjson.JSON;
 import com.cedarsoftware.util.io.JsonWriter;
@@ -8,7 +8,6 @@ import org.json.simple.parser.ParseException;
 import org.json.simple.parser.*;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ConfigFile {
@@ -88,14 +87,14 @@ public class ConfigFile {
     }
 
     public static void addObjectToCommList(JSONObject jsonObject) {
-        ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
+        ArrayList<JSONObject> commListCopy = CommandButtons.getMasterCommList();
         commListCopy.add(jsonObject);
-        MacroButtons.setMasterCommList(commListCopy);
+        CommandButtons.setMasterCommList(commListCopy);
     }
 
     public static void removeObject(JSONObject objToRemove) {
         // get masterCommList and remove object from list
-        ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
+        ArrayList<JSONObject> commListCopy = CommandButtons.getMasterCommList();
         commListCopy.remove(objToRemove);
 
         // get commands.json

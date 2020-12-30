@@ -1,9 +1,9 @@
-package com.josyf.macrobuttons;
+package com.josyf.commandbuttons;
 
 
 
-import com.josyf.macrobuttons.gui.ButtonGUI;
-import com.josyf.macrobuttons.gui.ButtonGUIScreen;
+import com.josyf.commandbuttons.gui.ButtonGUI;
+import com.josyf.commandbuttons.gui.ButtonGUIScreen;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -15,7 +15,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 
-public class MacroButtons implements ModInitializer {
+public class CommandButtons implements ModInitializer {
 
     public static final String MOD_ID = "mgbuttons";
     private static ArrayList<JSONObject> masterCommList;
@@ -34,10 +34,10 @@ public class MacroButtons implements ModInitializer {
     private void assignGuiToKey() {
         // Currently assigns to the G key
         KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.macrobuttons.opengui", // The translation key of the keybinding's name
+                "key.commandbuttons.opengui", // The translation key of the keybinding's name
                 InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
                 GLFW.GLFW_KEY_G, // The keycode of the key
-                "gui.macrobuttons.mgbuttons" // The translation key of the keybinding's category.
+                "gui.commandbuttons.mgbuttons" // The translation key of the keybinding's category.
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

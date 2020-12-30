@@ -1,11 +1,10 @@
-package com.josyf.macrobuttons.gui;
+package com.josyf.commandbuttons.gui;
 
-import com.josyf.macrobuttons.ConfigFile;
-import com.josyf.macrobuttons.MacroButtons;
+import com.josyf.commandbuttons.CommandButtons;
+import com.josyf.commandbuttons.ConfigFile;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import org.json.simple.JSONObject;
 
@@ -73,7 +72,7 @@ public class ButtonGUI extends LightweightGuiDescription {
                         ConfigFile.removeObject(newJsonObject);
                         root.remove(button);
                     } else {
-                        MacroButtons.runCommand(commandString);
+                        CommandButtons.runCommand(commandString);
                     }
 
                 });
@@ -106,7 +105,7 @@ public class ButtonGUI extends LightweightGuiDescription {
                     ConfigFile.removeObject(object);
                     root.remove(button);
                 } else {
-                    MacroButtons.runCommand(command);
+                    CommandButtons.runCommand(command);
                 }
 
             });
@@ -121,7 +120,7 @@ public class ButtonGUI extends LightweightGuiDescription {
 
     // Array will contain String class types. Convert these to objects.
     private void addSavedButtons(WGridPanel root, WToggleButton toggle) {
-        ArrayList<JSONObject> commListCopy = MacroButtons.getMasterCommList();
+        ArrayList<JSONObject> commListCopy = CommandButtons.getMasterCommList();
         // Then convert the objects to buttons
         if (commListCopy != null) {
             for (int i = 0; i < commListCopy.size(); i++) {
@@ -146,7 +145,7 @@ public class ButtonGUI extends LightweightGuiDescription {
     }
 
     private boolean isListTooLong() {
-        return MacroButtons.getMasterCommList().size() > 19;
+        return CommandButtons.getMasterCommList().size() > 19;
     }
 
     // Change background panel color to transparent black

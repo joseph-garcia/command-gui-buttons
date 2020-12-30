@@ -1,4 +1,4 @@
-package com.josyf.macrobuttons.gui;
+package com.josyf.commandbuttons.gui;
 
 import io.github.cottonmc.cotton.gui.GuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
