@@ -5,6 +5,7 @@ import com.josyf.commandbuttons.ConfigFile;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.TranslatableText;
 import org.json.simple.JSONObject;
 
@@ -20,18 +21,21 @@ public class ButtonGUI extends LightweightGuiDescription {
         // initialize root panel of GUI
         WGridPanel root = new WGridPanel();
         setupBackground(root);
-
-        // Text GUI, not needed yet
-        // WLabel label = new WLabel(new LiteralText("Test"), 0xFFFFFF);
-        // root.add(label, 0, 4, 2, 1);
+        addCloseButton(root);
 
         // Add delete toggle button
         WToggleButton delToggle = new WToggleButton(new TranslatableText("Delete"));
-        root.add(delToggle, 17, 0, 3, 1);
+        root.add(delToggle, 0, 11, 3, 1);
 
         addSavedButtons(root, delToggle);
         addCommandSection(root, delToggle);
         root.validate(this);
+    }
+
+    private void addCloseButton(WGridPanel root) {
+        WButton escButton = new WButton(new TranslatableText("x"));
+        escButton.setOnClick(() -> MinecraftClient.getInstance().player.closeScreen());
+        root.add(escButton, 17, 1, 2, 2);
     }
 
     private void addCommandSection(WGridPanel root, WToggleButton toggle) {
@@ -49,9 +53,7 @@ public class ButtonGUI extends LightweightGuiDescription {
 
         // Add button for command entry
         WButton addCmdBtn = new WButton(new TranslatableText("+"));
-        addCmdBtn.setOnClick(() -> {
-            addGUIButton(root, nameTextField, commandTextField, toggle);
-        });
+        addCmdBtn.setOnClick(() -> addGUIButton(root, nameTextField, commandTextField, toggle));
         root.add(addCmdBtn, 18, 12, 1, 1);
     }
 
