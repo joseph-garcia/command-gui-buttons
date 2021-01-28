@@ -74,14 +74,11 @@ public class ConfigFile {
             for (int i = 0; i < array.size(); i++) {
                 JSONObject childObject = (JSONObject)array.get(i);
                 commandObjects.add(childObject);
-                System.out.println(i);
                 if (i >= 19) break;
             }
             return commandObjects;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (IOException | ParseException e) {
+            System.out.println("Commands.json not yet initialized!");
         }
         return null;
     }
